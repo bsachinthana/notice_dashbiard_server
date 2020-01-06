@@ -8,8 +8,12 @@ app.use(bodyParser.json());
 const http = require('http').createServer(app);
 const io = require('socket.io').listen(http);
 
-app.use('/', express.static(path.join(__dirname, 'public')));
-
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use( '*', function ( req, res ) {
+  res.sendFile(path.join(__dirname, 'public/index.html'));
+});
 const connections = [];
 
 io.sockets.on('connection',(socket) => {
